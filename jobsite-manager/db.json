@@ -1,0 +1,28 @@
+{
+  "jobSites": [
+    {
+      "id": 1,
+      "name": "Another test",
+      "status": "In Progress",
+      "category": "Sidewalk Shed, Scaffold"
+    },
+    {
+      "id": 2,
+      "name": "Test final",
+      "status": "On Hold",
+      "category": "Sidewalk Shed"
+    },
+    {
+      "id": 3,
+      "name": "Testing againnn",
+      "status": "Completed",
+      "category": "Sidewalk Shed"
+    },
+    {
+      "id": 4,
+      "name": "saf",
+      "status": "In Progress",
+      "category": "Sidewalk Shed"
+    }
+  ]
+}
