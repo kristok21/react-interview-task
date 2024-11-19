@@ -56,6 +56,11 @@ function JobSiteList() {
     Scaffold: "#ffc107",
     Shoring: "#a30b8a",
   };
+  const statusTextColors = {
+    Completed: "#008000a8",
+    "In Progress": "#33c233a8",
+    "On Hold": "#dc3545",
+  };
 
   useEffect(() => {
     if (isModalOpen) {
@@ -321,7 +326,21 @@ function JobSiteList() {
                         onClick={toggleStatusDropdown}
                       >
                         <div className="dropdown selected-status">
-                          {selectedStatus || "Select one"}
+                          <div>
+                            {selectedStatus && (
+                              <span
+                                className="status-bullet"
+                                style={{
+                                  color:
+                                    statusTextColors[selectedStatus] || "#000",
+                                  marginRight: "8px",
+                                }}
+                              >
+                                •
+                              </span>
+                            )}
+                            {selectedStatus || "Select one"}
+                          </div>
                           <span
                             className={`caret ${isStatusOpen ? "open" : ""}`}
                           >

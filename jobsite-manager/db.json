@@ -2,27 +2,19 @@
   "jobSites": [
     {
       "id": 1,
-      "name": "Another test",
-      "status": "In Progress",
-      "category": "Sidewalk Shed, Scaffold"
-    },
-    {
-      "id": 2,
-      "name": "Test final",
-      "status": "On Hold",
-      "category": "Sidewalk Shed"
-    },
-    {
-      "id": 3,
-      "name": "Testing againnn",
+      "name": "TEST",
       "status": "Completed",
-      "category": "Sidewalk Shed"
-    },
+      "category": "Scaffold"
+    }
+  ],
+  "items": [
     {
-      "id": 4,
-      "name": "saf",
-      "status": "In Progress",
-      "category": "Sidewalk Shed"
+      "id": 1,
+      "item": "Plywood",
+      "quantity": "44",
+      "description": "TEST",
+      "notes": "Kristo",
+      "category": "Scaffold"
     }
   ]
 }
