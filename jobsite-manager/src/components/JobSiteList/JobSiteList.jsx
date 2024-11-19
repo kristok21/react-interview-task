@@ -13,8 +13,70 @@ function JobSiteList() {
   const { jobSites, loading, error, createJobSite } = useJobSites();
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newJobSite, setNewJobSite] = useState({ name: "", status: "", category: "" });
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [newJobSite, setNewJobSite] = useState({
+    name: "",
+    status: "",
+    category: "",
+  });
+  const categoryTextColors = {
+    "Sidewalk Shed": "#0b9116",
+    Scaffold: "#ffc107",
+    Shoring: "#a30b8a",
+  };
+
+  const statusTextColors = {
+    Completed: "#008000a8",
+    "In Progress": "#33c233a8",
+    "On Hold": "#dc3545",
+  };
+  const removeCategory = (category) => {
+    setSelectedCategories((prevSelected) =>
+      prevSelected.filter((selected) => selected !== category)
+    );
+  };
+  const handleSelect = (status) => {
+    setSelectedStatus(status);
+    setNewJobSite((prev) => ({
+      ...prev,
+      status: status,
+    }));
+    setIsStatusOpen(false);
+  };
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const toggleCategorySelection = (category) => {
+    setSelectedCategories((prevSelected) => {
+      const updatedCategories = prevSelected.includes(category)
+        ? prevSelected.filter((item) => item !== category)
+        : [...prevSelected, category];
+
+      setNewJobSite((prev) => ({
+        ...prev,
+        category: updatedCategories.join(", "),
+      }));
+
+      return updatedCategories;
+    });
+  };
+
+  const toggleCategoryDropdown = () => {
+    setIsCategoryOpen(!isCategoryOpen);
+  };
+
+  const toggleStatusDropdown = () => {
+    setIsStatusOpen(!isStatusOpen);
+  };
+
+  const handleSave = () => {
+    if (!newJobSite.name || !newJobSite.status || !newJobSite.category) {
+      alert("All fields are required!");
+      return;
+    }
+    createJobSite(newJobSite);
+    setIsModalOpen(false);
+  };
 
   const filteredJobSites = useMemo(() => {
     return jobSites.filter((site) =>
@@ -22,15 +84,26 @@ function JobSiteList() {
     );
   }, [jobSites, searchTerm]);
 
+  const jobCounts = useMemo(() => {
+    const counts = { "On Road": 0, Completed: 0, "On Hold": 0 };
+    jobSites.forEach((site) => {
+      counts[site.status] = (counts[site.status] || 0) + 1;
+    });
+    return counts;
+  }, [jobSites]);
+
   return (
     <div className="modal-overlay">
       <div className="modal-container">
-        <JobSiteStatus jobCounts={{ 'On Road': 0, Completed: 0, 'On Hold': 0 }} />
+        <JobSiteStatus jobCounts={jobCounts} />
         <div className="list-container">
           <h2>Job Sites</h2>
           <div className="actions">
             <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-            <button className="create-button" onClick={() => setIsModalOpen(true)}>
+            <button
+              className="create-button"
+              onClick={() => setIsModalOpen(true)}
+            >
               Create <FaPlus />
             </button>
           </div>
@@ -46,14 +119,20 @@ function JobSiteList() {
         <JobSiteModal
           isModalOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          onSave={handleSave}
           newJobSite={newJobSite}
-          onChange={setNewJobSite}
-          onSave={() => {
-            createJobSite(newJobSite);
-            setIsModalOpen(false);
-          }}
+          setNewJobSite={setNewJobSite}
           selectedCategories={selectedCategories}
-          setSelectedCategories={setSelectedCategories}
+          categoryTextColors={categoryTextColors}
+          toggleCategoryDropdown={toggleCategoryDropdown}
+          isCategoryOpen={isCategoryOpen}
+          toggleCategorySelection={toggleCategorySelection}
+          removeCategory={removeCategory}
+          selectedStatus={selectedStatus}
+          statusTextColors={statusTextColors}
+          toggleStatusDropdown={toggleStatusDropdown}
+          isStatusOpen={isStatusOpen}
+          handleSelect={handleSelect}
         />
       </div>
     </div>

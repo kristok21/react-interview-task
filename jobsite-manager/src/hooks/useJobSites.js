@@ -1,4 +1,3 @@
-// useJobSites.js
 import { useState, useEffect } from "react";
 
 const useJobSites = () => {
@@ -26,7 +25,28 @@ const useJobSites = () => {
     fetchJobSites();
   }, []);
 
-  return { jobSites, loading, error };
+  const createJobSite = async (newJobSite) => {
+    try {
+      const response = await fetch("http://localhost:5000/jobSites", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newJobSite),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create job site.");
+      }
+
+      const createdJobSite = await response.json();
+      setJobSites((prevJobSites) => [...prevJobSites, createdJobSite]);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  return { jobSites, loading, error, createJobSite };
 };
 
 export default useJobSites;

@@ -1,6 +1,9 @@
+import { FaSearch } from "react-icons/fa";
+
 function SearchBar({ searchTerm, onSearchChange }) {
   return (
     <div className="search-wrapper">
+      <FaSearch className="search-icon" />
       <input
         type="text"
         placeholder="Search job sites..."

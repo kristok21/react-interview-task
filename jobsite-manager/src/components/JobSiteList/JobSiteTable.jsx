@@ -13,12 +13,22 @@ function JobSiteTable({ jobSites, navigate }) {
             <td
               className="jobsite-name"
               onClick={() =>
-                navigate(`/inventory-dashboard/${site.id}`, { state: { jobSite: site } })
+                navigate(`/inventory-dashboard/${site.id}`, {
+                  state: { jobSite: site },
+                })
               }
             >
               {site.name}
             </td>
-            <td>{site.status}</td>
+            <td>
+              <div
+                className={`status ${site.status
+                  .replace(/\s+/g, "-")
+                  .toLowerCase()}`}
+              >
+                {site.status}
+              </div>
+            </td>
           </tr>
         ))}
       </tbody>

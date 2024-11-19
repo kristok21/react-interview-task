@@ -1,12 +1,18 @@
 function JobSiteStatus({ jobCounts }) {
   return (
     <div className="status-container">
-      {["On-Road", "Completed", "On-Hold"].map((status) => (
-        <div key={status} className={`status-box ${status.toLowerCase()}`}>
-          <p>{jobCounts[status]}</p>
-          <h3>{status}</h3>
-        </div>
-      ))}
+      <div className="status-box on-road">
+        <p>{jobCounts["On Road"]}</p>
+        <h3>On Road</h3>
+      </div>
+      <div className="status-box completed">
+        <p>{jobCounts.Completed}</p>
+        <h3>Completed</h3>
+      </div>
+      <div className="status-box on-hold">
+        <p>{jobCounts["On Hold"]}</p>
+        <h3>On Hold</h3>
+      </div>
     </div>
   );
 }

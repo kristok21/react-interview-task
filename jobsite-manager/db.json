@@ -1,7 +1,7 @@
 {
   "jobSites": [
     {
-      "id": 1,
+      "id": "1",
       "name": "TEST",
       "status": "Completed",
       "category": "Scaffold"
@@ -9,7 +9,7 @@
   ],
   "items": [
     {
-      "id": 1,
+      "id": "1",
       "item": "Plywood",
       "quantity": "44",
       "description": "TEST",
