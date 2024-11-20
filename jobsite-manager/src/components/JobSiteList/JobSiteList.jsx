@@ -77,7 +77,14 @@ function JobSiteList() {
       alert("All fields are required!");
       return;
     }
-    createJobSite(newJobSite);
+    const newId =
+      jobSites.length > 0
+        ? Math.max(...jobSites.map((site) => site.id)) + 1
+        : 1;
+
+    const newJobSiteWithId = { ...newJobSite, id: newId };
+
+    createJobSite(newJobSiteWithId);
     setIsModalOpen(false);
   };
 

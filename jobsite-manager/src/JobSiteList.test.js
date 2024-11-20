@@ -26,6 +26,6 @@ describe("JobSiteList Component", () => {
 
     fireEvent.click(screen.getByText("Create"));
 
-    expect(screen.getByText("Save")).toBeInTheDocument();
+    expect(screen.getByText("Save Changes")).toBeInTheDocument();
   });
 });

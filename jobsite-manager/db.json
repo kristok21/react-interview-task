@@ -5,6 +5,42 @@
       "name": "TEST",
       "status": "Completed",
       "category": "Scaffold"
+    },
+    {
+      "id": "2",
+      "name": "New JobSite Todat",
+      "status": "In Progress",
+      "category": "Sidewalk Shed"
+    },
+    {
+      "id": "3",
+      "name": "Another one!!!",
+      "status": "On Hold",
+      "category": "Sidewalk Shed"
+    },
+    {
+      "id": "4",
+      "name": "Just Testing :)",
+      "status": "In Progress",
+      "category": "Sidewalk Shed"
+    },
+    {
+      "id": "5",
+      "name": "Last Check.",
+      "status": "Completed",
+      "category": "Scaffold"
+    },
+    {
+      "id": "6",
+      "name": "Final check, for real",
+      "status": "On Hold",
+      "category": "Sidewalk Shed"
+    },
+    {
+      "id": "7",
+      "name": "All Categories included",
+      "status": "Completed",
+      "category": "Sidewalk Shed, Scaffold, Shoring"
     }
   ],
   "items": [
@@ -38,6 +74,14 @@
       "quantity": "4111",
       "description": "Desc test...",
       "notes": "Final test!",
+      "category": "Scaffold"
+    },
+    {
+      "id": 5,
+      "item": "Plywood",
+      "quantity": "444",
+      "description": "Description so long, just for testing purpose, Kristo did it again!",
+      "notes": "No notes for this one.",
       "category": "Scaffold"
     }
   ]
