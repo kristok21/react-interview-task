@@ -1,4 +1,4 @@
-###How to Run the App
+##How to Run the App
 Follow the steps below to run the app and set up the backend:
 
 Clone this repository to your local machine:
@@ -22,14 +22,14 @@ npm start
 
 The app will open in your default browser at http://localhost:3000.
 
-###How to Make the App More Secure
+##How to Make the App More Secure
 Use Secure Authentication: Implement multi-factor authentication (MFA).
 Token-Based Authentication: Use JSON Web Tokens (JWT) with short expiration times for session management.
 Role-Based Access Control (RBAC): Assign roles to users and restrict access to routes or resources based on their role.
 CORS Policies: Restrict which origins can access your API.
 Protect Local Storage: Avoid storing sensitive data like JWT tokens in localStorage; prefer HttpOnly cookies instead.
 
-###How to Scale the App for Millions of Records
+##How to Scale the App for Millions of Records
 WebSocket Streaming: For real-time data updates, use WebSockets or server-sent events to push only updated records to the client.
 Lazy Load Components: Split large components into smaller chunks and load them only when needed using React.lazy and Suspense.
 Tree Shaking: Use tools like Webpack or Rollup to remove unused code and reduce bundle size.
