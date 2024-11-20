@@ -1,21 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { MdArrowBack } from "react-icons/md";
-import { FaTimes } from "react-icons/fa";
-import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
   Typography,
-  Paper,
   Button,
-  Chip,
-  List,
-  ListItem,
   Modal,
-  TextField,
   Autocomplete,
+  TextField,
 } from "@mui/material";
-import { MdCheckCircle } from "react-icons/md";
+import CategoriesList from "./CategoriesList";
+import DataTable from "./DataTable";
+import { FaTimes } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa";
 
 function InventoryDashboard() {
@@ -73,6 +68,14 @@ function InventoryDashboard() {
     setIsModalOpen(true);
   };
 
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleModalOpen = () => {
     setFormData({
       id: null,
@@ -89,109 +92,88 @@ function InventoryDashboard() {
     setIsEditing(false);
   };
 
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+   const handleSaveChanges = () => {
+     if (!formData.item || !formData.quantity || !formData.description) {
+       console.error("Error: All fields are required.");
+       alert("Please fill out all fields before saving.");
+       return;
+     }
 
-  const handleSaveChanges = () => {
-    if (!formData.item || !formData.quantity || !formData.description) {
-      console.error("Error: All fields are required.");
-      alert("Please fill out all fields before saving.");
-      return;
-    }
+     const itemData = {
+       ...formData,
+       category: selectedCategory,
+     };
 
-    const itemData = {
-      ...formData,
-      category: selectedCategory,
-    };
+     if (!formData.id) {
+       const newId =
+         rows.length > 0 ? Math.max(...rows.map((row) => row.id)) + 1 : 1;
+       const newItem = { ...itemData, id: newId };
 
-    if (!formData.id) {
-      const newId =
-        rows.length > 0 ? Math.max(...rows.map((row) => row.id)) + 1 : 1;
-      const newItem = { ...itemData, id: newId };
+       fetch("http://localhost:5000/items", {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify(newItem),
+       })
+         .then((response) => {
+           if (!response.ok) {
+             throw new Error("Failed to create new item on the server.");
+           }
+           return response.json();
+         })
+         .then((createdItem) => {
+           setRows((prevRows) => [...prevRows, createdItem]);
+           console.log("New item created:", createdItem);
+         })
+         .catch((error) => {
+           console.error("Error creating item:", error);
+         });
+     } else {
+       const updatedRows = rows.map((row) =>
+         row.id === formData.id
+           ? {
+               ...row,
+               item: formData.item,
+               quantity: formData.quantity,
+               description: formData.description,
+               notes: formData.notes,
+               category: selectedCategory,
+             }
+           : row
+       );
 
-      fetch("http://localhost:5000/items", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newItem),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to create new item on the server.");
-          }
-          return response.json();
-        })
-        .then((createdItem) => {
-          setRows((prevRows) => [...prevRows, createdItem]);
-          console.log("New item created:", createdItem);
-        })
-        .catch((error) => {
-          console.error("Error creating item:", error);
-        });
-    } else {
-      const updatedRows = rows.map((row) =>
-        row.id === formData.id
-          ? {
-              ...row,
-              item: formData.item,
-              quantity: formData.quantity,
-              description: formData.description,
-              notes: formData.notes,
-              category: selectedCategory,
-            }
-          : row
-      );
+       setRows(updatedRows);
 
-      setRows(updatedRows);
+       fetch(`http://localhost:5000/items/${formData.id}`, {
+         method: "PUT",
+         headers: {
+           "Content-Type": "application/json",
+         },
+         body: JSON.stringify({
+           item: formData.item,
+           quantity: formData.quantity,
+           description: formData.description,
+           notes: formData.notes,
+           category: selectedCategory,
+         }),
+       })
+         .then((response) => {
+           if (!response.ok) {
+             throw new Error("Failed to update item on the server.");
+           }
+           return response.json();
+         })
+         .then(() => {
+           console.log("Item updated in db.json");
+         })
+         .catch((error) => {
+           console.error("Error saving item:", error);
+         });
+     }
 
-      fetch(`http://localhost:5000/items/${formData.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          item: formData.item,
-          quantity: formData.quantity,
-          description: formData.description,
-          notes: formData.notes,
-          category: selectedCategory,
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to update item on the server.");
-          }
-          return response.json();
-        })
-        .then(() => {
-          console.log("Item updated in db.json");
-        })
-        .catch((error) => {
-          console.error("Error saving item:", error);
-        });
-    }
-
-    setIsModalOpen(false);
-  };
-
-  const columns = [
-    { field: "id", headerName: "Nr", width: 50, editable: false },
-    { field: "item", headerName: "Item", flex: 1, editable: true },
-    { field: "quantity", headerName: "Quantity", width: 100, editable: true },
-    {
-      field: "description",
-      headerName: "Description",
-      flex: 1,
-      editable: true,
-    },
-    { field: "notes", headerName: "Notes", flex: 1, editable: true },
-  ];
+     setIsModalOpen(false);
+   };
 
   return (
     <Box
@@ -203,76 +185,14 @@ function InventoryDashboard() {
         gap: 2,
       }}
     >
-      <Paper
-        elevation={3}
-        sx={{ p: 2, width: "20%", display: "flex", flexDirection: "column" }}
-      >
-        {jobSite ? (
-          <>
-            <Box
-              sx={{
-                p: 1,
-                mb: 2,
-              }}
-            >
-              <Typography variant="h5">{jobSite.name}</Typography>
-            </Box>
-            <List sx={{ padding: 0 }}>
-              {selectedCategories.length === 0 ? (
-                <Typography variant="body1" color="textSecondary">
-                  No category selected. Please select a service on your left to
-                  proceed.
-                </Typography>
-              ) : (
-                selectedCategories.map((category) => (
-                  <ListItem key={category} sx={{ padding: 0, marginBottom: 1 }}>
-                    <Chip
-                      label={category}
-                      color={
-                        selectedCategory === category ? "success" : "default"
-                      }
-                      onClick={() => {
-                        setSelectedCategory(category);
-                        setIsGridVisible(true);
-                      }}
-                      sx={{
-                        cursor: "pointer",
-                        width: "100%",
-                        justifyContent: "space-between",
-                      }}
-                      deleteIcon={
-                        selectedCategory === category ? <MdCheckCircle /> : null
-                      }
-                      onDelete={() => {}}
-                    />
-                  </ListItem>
-                ))
-              )}
-            </List>
-          </>
-        ) : (
-          <Typography variant="body1" color="textSecondary">
-            No job site selected
-          </Typography>
-        )}
-        <Box
-          sx={{
-            mt: "auto",
-            display: "flex",
-            justifyContent: "center",
-            width: "100%",
-          }}
-        >
-          <Button
-            variant="contained"
-            startIcon={<MdArrowBack />}
-            onClick={() => navigate(-1)}
-            sx={{ mt: 2, width: "auto" }}
-          >
-            Go Back
-          </Button>
-        </Box>
-      </Paper>
+      <CategoriesList
+        jobSite={jobSite}
+        selectedCategories={selectedCategories}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+        setIsGridVisible={setIsGridVisible}
+        navigate={navigate}
+      />
 
       <Box sx={{ width: "79%" }}>
         {selectedCategory && (
@@ -291,31 +211,13 @@ function InventoryDashboard() {
           </Button>
         )}
         {isGridVisible ? (
-          <Paper elevation={3} sx={{ p: 2 }}>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mb={2}
-            >
-              <Typography variant="h6">{`Details for "${selectedCategory}"`}</Typography>
-              <FaTimes
-                onClick={() => {
-                  setIsGridVisible(false);
-                  setSelectedCategory("");
-                }}
-                style={{ cursor: "pointer", color: "#888" }}
-              />
-            </Box>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              autoHeight
-              disableSelectionOnClick
-              onCellDoubleClick={handleCellDoubleClick}
-              sx={{ backgroundColor: "#f9f9f9" }}
-            />
-          </Paper>
+          <DataTable
+            rows={rows}
+            selectedCategory={selectedCategory}
+            setIsGridVisible={setIsGridVisible}
+            setSelectedCategory={setSelectedCategory}
+            handleCellDoubleClick={handleCellDoubleClick}
+          />
         ) : (
           <Box textAlign="center" p={3}>
             <img

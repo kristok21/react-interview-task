@@ -2,10 +2,8 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import JobSiteTable from "./JobSiteTable";
 
-// Mock the navigate function from react-router
 const mockNavigate = jest.fn();
 
-// Sample jobSites data for testing
 const jobSites = [
   { id: 1, name: "Site 1", status: "On Road" },
   { id: 2, name: "Site 2", status: "Completed" },

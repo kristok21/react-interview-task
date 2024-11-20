@@ -9,11 +9,35 @@
   ],
   "items": [
     {
-      "id": "1",
+      "id": 1,
+      "item": "Scaffolding",
+      "quantity": "57",
+      "description": "Test by Kristo",
+      "notes": "Note TEST",
+      "category": "Sidewalk Shed"
+    },
+    {
+      "id": 2,
+      "item": "Concrete",
+      "quantity": "85",
+      "description": "Kristoo",
+      "notes": "notes test",
+      "category": "Scaffold"
+    },
+    {
+      "id": 3,
+      "item": "Scaffolding",
+      "quantity": "7777",
+      "description": "Kristo again",
+      "notes": "Working well!",
+      "category": "Scaffold"
+    },
+    {
+      "id": 4,
       "item": "Plywood",
-      "quantity": "44",
-      "description": "TEST",
-      "notes": "Kristo",
+      "quantity": "4111",
+      "description": "Desc test...",
+      "notes": "Final test!",
       "category": "Scaffold"
     }
   ]

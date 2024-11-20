@@ -163,10 +163,10 @@ function JobSiteModal({
 
         <div className="modal-footer">
           <button onClick={onClose} className="modal-button">
-            Cancel <FaTimes />
+            Cancel Changes <FaTimes />
           </button>
           <button onClick={onSave} className="modal-button">
-            Save <FaCheck />
+            Save Changes <FaCheck />
           </button>
         </div>
       </div>

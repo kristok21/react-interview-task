@@ -21,6 +21,7 @@ function JobSiteList() {
     status: "",
     category: "",
   });
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const categoryTextColors = {
     "Sidewalk Shed": "#0b9116",
     Scaffold: "#ffc107",
@@ -30,13 +31,15 @@ function JobSiteList() {
   const statusTextColors = {
     Completed: "#008000a8",
     "In Progress": "#33c233a8",
-    "On Hold": "#dc3545",
+    "On Hold": "#ffc107",
   };
+
   const removeCategory = (category) => {
     setSelectedCategories((prevSelected) =>
       prevSelected.filter((selected) => selected !== category)
     );
   };
+
   const handleSelect = (status) => {
     setSelectedStatus(status);
     setNewJobSite((prev) => ({
@@ -45,7 +48,7 @@ function JobSiteList() {
     }));
     setIsStatusOpen(false);
   };
-  const [selectedCategories, setSelectedCategories] = useState([]);
+
   const toggleCategorySelection = (category) => {
     setSelectedCategories((prevSelected) => {
       const updatedCategories = prevSelected.includes(category)
@@ -78,6 +81,17 @@ function JobSiteList() {
     setIsModalOpen(false);
   };
 
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setNewJobSite({
+      name: "",
+      status: "",
+      category: "",
+    });
+    setSelectedCategories([]);
+    setSelectedStatus("");
+  };
+
   const filteredJobSites = useMemo(() => {
     return jobSites.filter((site) =>
       site.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -102,7 +116,16 @@ function JobSiteList() {
             <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
             <button
               className="create-button"
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                setNewJobSite({
+                  name: "",
+                  status: "",
+                  category: "",
+                });
+                setSelectedCategories([]);
+                setSelectedStatus("");
+                setIsModalOpen(true);
+              }}
             >
               Create <FaPlus />
             </button>
@@ -118,7 +141,7 @@ function JobSiteList() {
 
         <JobSiteModal
           isModalOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleModalClose}
           onSave={handleSave}
           newJobSite={newJobSite}
           setNewJobSite={setNewJobSite}
